@@ -1,5 +1,6 @@
 package hckt.simplecloset.member.application.service;
 
+import hckt.simplecloset.global.annotation.UseCase;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
@@ -15,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@UseCase
 @RequiredArgsConstructor
-@Service
 @Transactional(readOnly = true)
 public class MemberService implements SignInUseCase, SignUpUseCase {
     private final CommandMemberPort commandMemberPort;
