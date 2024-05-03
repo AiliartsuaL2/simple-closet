@@ -2,14 +2,14 @@ package hckt.simplecloset.member.domain;
 
 import hckt.simplecloset.global.domain.BaseEntity;
 import hckt.simplecloset.member.exception.ErrorMessage;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class Member extends BaseEntity {
     private static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 100)
@@ -26,6 +26,11 @@ public class Member extends BaseEntity {
 
     @Column(length = 60)
     private String password;
+
+    @Transient
+    List<OAuth> oAuths = new ArrayList<>();
+    @Transient
+    List<Role> roles = new ArrayList<>();
 
     // 회원 생성
     public Member(String email, String password) {
