@@ -41,9 +41,10 @@ public class Member extends BaseEntity {
     }
 
     // 로그인
-    public void login(String password) {
+    public Long login(String password) {
         if (!B_CRYPT_PASSWORD_ENCODER.matches(password, this.password)) {
             throw new IllegalArgumentException(ErrorMessage.NOT_MATCHED_PASSWORD.getMessage());
         }
+        return this.id;
     }
 }
