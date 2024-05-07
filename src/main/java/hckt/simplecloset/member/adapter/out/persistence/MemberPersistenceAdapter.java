@@ -1,4 +1,4 @@
-package hckt.simplecloset.member.adapter.persistence;
+package hckt.simplecloset.member.adapter.out.persistence;
 
 import hckt.simplecloset.global.annotation.PersistenceAdapter;
 import hckt.simplecloset.member.application.port.out.CommandMemberPort;

@@ -1,4 +1,4 @@
-package hckt.simplecloset.member.adapter.persistence;
+package hckt.simplecloset.member.adapter.out.persistence;
 
 import hckt.simplecloset.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
