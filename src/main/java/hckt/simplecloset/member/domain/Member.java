@@ -27,10 +27,8 @@ public class Member extends BaseEntity {
     @Column(length = 60)
     private String password;
 
-    @Transient
-    List<OAuth> oAuths = new ArrayList<>();
-    @Transient
-    List<Role> roles = new ArrayList<>();
+    @Column(length = 20)
+    private String provider;
 
     // 회원 생성
     public Member(String email, String password) {
