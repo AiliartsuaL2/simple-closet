@@ -1,10 +1,7 @@
 package hckt.simplecloset.global.application.service;
 
 import hckt.simplecloset.global.exception.ErrorMessage;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
@@ -57,6 +54,10 @@ class JwtProvider implements CreateTokenProvider, GetTokenInfoProvider {
             throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
         }
 
+        if (!isValid(token)) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_TOKEN.getMessage());
+        }
+
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
@@ -73,7 +74,7 @@ class JwtProvider implements CreateTokenProvider, GetTokenInfoProvider {
             return claims.getBody()
                     .getExpiration()
                     .after(new Date());
-        } catch (RuntimeException ex) {
+        } catch (JwtException ex) {
             return false;
         }
     }
