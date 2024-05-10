@@ -1,5 +1,6 @@
 package hckt.simplecloset.global.exception;
 
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ public enum ErrorMessage {
     NOT_EXIST_MEMBER("존재하지 않는 회원이에요"),
     NOT_EXIST_PAYLOAD("payload가 존재하지 않아요"),
     NOT_EXIST_TOKEN("토큰이 존재하지 않아요"),
-    INVALID_TOKEN("유효하지 않은 토큰이에요");
-
+    INVALID_TOKEN("유효하지 않은 토큰이에요"),
+    NOT_EXIST_PROVIDER_TYPE("유효하지 않은 소셜 타입이에요");
     private final String message;
 }

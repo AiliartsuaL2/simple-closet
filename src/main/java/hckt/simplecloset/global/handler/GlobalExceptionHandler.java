@@ -4,6 +4,7 @@ import hckt.simplecloset.global.dto.ApiErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,6 +21,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<ApiErrorResponse> illegalStateException(IllegalStateException ex){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return writeLogTraceAndResponse(status, ex);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiErrorResponse> httpMessageNotReadableException(HttpMessageNotReadableException ex){
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return writeLogTraceAndResponse(status, ex);
     }

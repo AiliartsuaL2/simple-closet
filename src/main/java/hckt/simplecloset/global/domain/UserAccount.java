@@ -1,5 +1,6 @@
 package hckt.simplecloset.global.domain;
 
+import hckt.simplecloset.global.domain.converter.RoleTypeConverter;
 import hckt.simplecloset.global.exception.ErrorMessage;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -23,8 +24,7 @@ public class UserAccount extends BaseEntity implements UserDetails {
 
     private Long memberId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 20,nullable=false)
+    @Convert(converter = RoleTypeConverter.class)
     private RoleType roleType;
 
     public UserAccount(Long memberId, String roleType) {
