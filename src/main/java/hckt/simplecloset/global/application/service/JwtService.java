@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 @Component
@@ -35,23 +36,34 @@ public class JwtService implements CreateTokenUseCase, ExtractPayloadUseCase, Re
 
     @Override
     public Long extractPayload(String accessToken) {
+        validateExistToken(accessToken);
         return Long.valueOf(getTokenInfoProvider.getPayload(accessToken));
     }
 
     @Override
     public String renewAccessToken(String refreshToken) {
+        validateExistToken(refreshToken);
         String payload = getTokenInfoProvider.getPayload(refreshToken);
         return createTokenProvider.createAccessToken(payload);
     }
 
     @Override
     public boolean isValid(String token) {
+        validateExistToken(token);
         return getTokenInfoProvider.isValid(token);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Authentication getAuthentication(String accessToken) {
+        validateExistToken(accessToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(getTokenInfoProvider.getPayload(accessToken));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    private void validateExistToken(String token) {
+        if (ObjectUtils.isEmpty(token)) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
+        }
     }
 }
