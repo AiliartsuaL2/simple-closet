@@ -21,8 +21,8 @@ public class MemberService implements SignInUseCase, SignUpUseCase {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
 
-    @Transactional
     @Override
+    @Transactional
     public void signUp(SignUpRequestDto signUpRequestDto) {
         if (loadMemberPort.findByEmail(signUpRequestDto.email()).isPresent()) {
             throw new IllegalArgumentException(ErrorMessage.ALREADY_EXIST_EMAIL.getMessage());
