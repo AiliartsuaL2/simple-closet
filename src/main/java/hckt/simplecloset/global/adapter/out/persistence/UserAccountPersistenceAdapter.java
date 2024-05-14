@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class UserAccountPersistenceAdapter implements LoadUserAccountPort {
+class UserAccountPersistenceAdapter implements LoadUserAccountPort {
 
     private final UserAccountRepository userAccountRepository;
 

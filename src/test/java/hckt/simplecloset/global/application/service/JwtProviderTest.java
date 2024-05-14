@@ -1,6 +1,7 @@
 package hckt.simplecloset.global.application.service;
 
 import hckt.simplecloset.global.exception.ErrorMessage;
+import io.jsonwebtoken.JwtException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -98,8 +99,8 @@ class JwtProviderTest {
 
             // when & then
             Assertions.assertThatThrownBy(() -> jwtProvider.getPayload(accessToken))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessage(ErrorMessage.INVALID_TOKEN.getMessage());
+                    .isInstanceOf(JwtException.class)
+                    .hasMessage(ErrorMessage.EXPIRED_TOKEN.getMessage());
         }
 
         @Test
@@ -121,32 +122,30 @@ class JwtProviderTest {
     @DisplayName("토큰 검증 테스트")
     class isValid {
         @Test
-        @DisplayName("정상적인 토큰 형태가 아닌 경우, false가 반환된다.")
+        @DisplayName("정상적인 토큰 형태가 아닌 경우, 예외가 발생한다.")
         void test1() {
             // given
             String accessToken = "invalidToken";
 
-            // when
-            boolean result = jwtProvider.isValid(accessToken);
-
-            // then
-            Assertions.assertThat(result).isFalse();
+            // when & then
+            Assertions.assertThatThrownBy(() -> jwtProvider.isValid(accessToken))
+                    .isInstanceOf(JwtException.class)
+                    .hasMessage(ErrorMessage.MALFORMED_TOKEN.getMessage());
 
         }
 
         @Test
-        @DisplayName("토큰이 만료된 경우, false가 반환된다.")
+        @DisplayName("토큰이 만료된 경우, 예외가 발생한다.")
         void test2() {
             // given
             String payload = "payload";
             JwtProvider jwtProvider = new JwtProvider(SECRET_KEY, 0L, 0L);
             String accessToken = jwtProvider.createAccessToken(payload);
 
-            // when
-            boolean result = jwtProvider.isValid(accessToken);
-
-            // then
-            Assertions.assertThat(result).isFalse();
+            // when & then
+            Assertions.assertThatThrownBy(() -> jwtProvider.isValid(accessToken))
+                    .isInstanceOf(JwtException.class)
+                    .hasMessage(ErrorMessage.EXPIRED_TOKEN.getMessage());
         }
 
         @Test

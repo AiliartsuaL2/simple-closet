@@ -3,6 +3,7 @@ package hckt.simplecloset.global.application.service;
 import hckt.simplecloset.global.application.port.out.LoadUserAccountPort;
 import hckt.simplecloset.global.domain.Token;
 import hckt.simplecloset.global.domain.UserAccount;
+import hckt.simplecloset.global.exception.EmptyTokenException;
 import hckt.simplecloset.global.exception.ErrorMessage;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -91,7 +92,7 @@ class JwtServiceTest {
 
             // when & then
             Assertions.assertThatThrownBy(() -> jwtService.extractPayload(accessToken))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(EmptyTokenException.class)
                     .hasMessage(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
         }
 
@@ -123,7 +124,7 @@ class JwtServiceTest {
 
             // when & then
             Assertions.assertThatThrownBy(() -> jwtService.renewAccessToken(refreshToken))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(EmptyTokenException.class)
                     .hasMessage(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
         }
 
@@ -158,7 +159,7 @@ class JwtServiceTest {
 
             // when & then
             Assertions.assertThatThrownBy(() -> jwtService.isValid(accessToken))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(EmptyTokenException.class)
                     .hasMessage(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
         }
 
@@ -204,7 +205,7 @@ class JwtServiceTest {
 
             // when & then
             Assertions.assertThatThrownBy(() -> jwtService.getAuthentication(accessToken))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(EmptyTokenException.class)
                     .hasMessage(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
         }
 

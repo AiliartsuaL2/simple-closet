@@ -9,7 +9,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.Date;
 
 @Component
-class JwtProvider implements CreateTokenProvider, GetTokenInfoProvider {
+public class JwtProvider implements CreateTokenProvider, GetTokenInfoProvider {
     private final String secretKey;
     private final long accessTokenValidTime;
     private final long refreshTokenValidTime;
@@ -74,8 +74,12 @@ class JwtProvider implements CreateTokenProvider, GetTokenInfoProvider {
             return claims.getBody()
                     .getExpiration()
                     .after(new Date());
-        } catch (JwtException ex) {
-            return false;
+        } catch (SignatureException e) {
+            throw new JwtException(ErrorMessage.SIGNATURE_TOKEN_EXCEPTION.getMessage());
+        } catch (MalformedJwtException e) {
+            throw new JwtException(ErrorMessage.MALFORMED_TOKEN.getMessage());
+        } catch (ExpiredJwtException e) {
+            throw new JwtException(ErrorMessage.EXPIRED_TOKEN.getMessage());
         }
     }
 }

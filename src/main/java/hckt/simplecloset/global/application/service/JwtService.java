@@ -3,6 +3,7 @@ package hckt.simplecloset.global.application.service;
 import hckt.simplecloset.global.application.port.in.*;
 import hckt.simplecloset.global.application.port.out.LoadUserAccountPort;
 import hckt.simplecloset.global.domain.Token;
+import hckt.simplecloset.global.exception.EmptyTokenException;
 import hckt.simplecloset.global.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -63,7 +64,7 @@ public class JwtService implements CreateTokenUseCase, ExtractPayloadUseCase, Re
 
     private void validateExistToken(String token) {
         if (ObjectUtils.isEmpty(token)) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
+            throw new EmptyTokenException(ErrorMessage.NOT_EXIST_TOKEN.getMessage());
         }
     }
 }

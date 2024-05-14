@@ -20,7 +20,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        // unauthorized
-        jwtErrorResponseHandler.generateJwtErrorResponse(response, ErrorMessage.UNAUTHORIZED.getMessage(), HttpStatus.UNAUTHORIZED);
+        // authentication이 없을 때 발생
+        jwtErrorResponseHandler.generateJwtErrorResponse(response, ErrorMessage.NOT_EXIST_TOKEN.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }
