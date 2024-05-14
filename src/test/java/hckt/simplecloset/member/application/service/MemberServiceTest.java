@@ -12,6 +12,7 @@ import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
@@ -26,8 +27,9 @@ class MemberServiceTest {
     private static final String PROVIDER = "google";
     CommandMemberPort commandMemberPort = mock(CommandMemberPort.class);
     LoadMemberPort loadMemberPort = mock(LoadMemberPort.class);
+    ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
 
-    MemberService memberService = new MemberService(commandMemberPort, loadMemberPort);
+    MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, applicationEventPublisher);
 
     void assertThrow(ThrowableAssert.ThrowingCallable action, String errorMessage, Class<? extends Throwable> throwable) {
         Assertions.assertThatThrownBy(action)

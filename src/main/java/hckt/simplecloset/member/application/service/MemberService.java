@@ -2,6 +2,7 @@ package hckt.simplecloset.member.application.service;
 
 import hckt.simplecloset.global.annotation.UseCase;
 import hckt.simplecloset.global.domain.Provider;
+import hckt.simplecloset.global.dto.event.CreateUserAccountEvent;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
@@ -12,6 +13,7 @@ import hckt.simplecloset.member.application.port.out.LoadMemberPort;
 import hckt.simplecloset.member.domain.Member;
 import hckt.simplecloset.member.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService implements SignInUseCase, SignUpUseCase {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -33,6 +36,8 @@ public class MemberService implements SignInUseCase, SignUpUseCase {
                 signUpRequestDto.password(),
                 Provider.findByCode(signUpRequestDto.provider()));
         commandMemberPort.save(member);
+
+        eventPublisher.publishEvent(new CreateUserAccountEvent(member.getId()));
     }
 
     @Override

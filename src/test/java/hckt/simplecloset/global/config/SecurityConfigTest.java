@@ -1,6 +1,6 @@
 package hckt.simplecloset.global.config;
 
-import hckt.simplecloset.global.adapter.in.AuthenticationTestController;
+import hckt.simplecloset.global.adapter.in.rest.AuthenticationTestController;
 import hckt.simplecloset.global.application.port.out.LoadUserAccountPort;
 import hckt.simplecloset.global.application.service.JwtProvider;
 import hckt.simplecloset.global.application.service.JwtService;
@@ -162,9 +162,9 @@ class SecurityConfigTest {
 
         @Test
         @DisplayName("토큰 Payload가 서버에 등록되지 않은 경우 403이 응답된다.")
-        void test5() throws Exception {            // given
+        void test5() throws Exception {
+            // given
             String payLoad = "1";
-            JwtProvider jwtProvider = new JwtProvider(secretKey, 10000, 10000);
             String accessToken = jwtProvider.createAccessToken(payLoad);
             when(userDetailsService.loadUserByUsername(any()))
                     .thenThrow(UsernameNotFoundException.class);
