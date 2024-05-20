@@ -1,6 +1,7 @@
 package hckt.simplecloset.member.adapter.out.persistence;
 
 import hckt.simplecloset.global.annotation.PersistenceAdapter;
+import hckt.simplecloset.global.domain.Provider;
 import hckt.simplecloset.member.application.port.out.CommandMemberPort;
 import hckt.simplecloset.member.application.port.out.LoadMemberPort;
 import hckt.simplecloset.member.domain.Member;
@@ -21,5 +22,10 @@ class MemberPersistenceAdapter implements CommandMemberPort, LoadMemberPort {
     @Override
     public Optional<Member> findByEmail(String email) {
         return memberRepository.findMemberByEmail(email);
+    }
+
+    @Override
+    public Optional<Member> loadMemberByEmailAndProvider(String email, Provider provider) {
+        return memberRepository.findMemberByEmailAndProvider(email, provider);
     }
 }

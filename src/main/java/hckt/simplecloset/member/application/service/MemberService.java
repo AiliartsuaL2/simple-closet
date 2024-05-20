@@ -9,9 +9,13 @@ import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
 import hckt.simplecloset.member.application.port.in.SignInUseCase;
 import hckt.simplecloset.member.application.port.in.SignUpUseCase;
 import hckt.simplecloset.member.application.port.out.CommandMemberPort;
+import hckt.simplecloset.member.application.port.out.CommandOAuthInfoPort;
 import hckt.simplecloset.member.application.port.out.LoadMemberPort;
+import hckt.simplecloset.member.application.port.out.LoadOAuthInfoPort;
 import hckt.simplecloset.member.domain.Member;
+import hckt.simplecloset.member.domain.OAuthInfo;
 import hckt.simplecloset.member.exception.ErrorMessage;
+import hckt.simplecloset.member.exception.OAuthSignInException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +27,9 @@ public class MemberService implements SignInUseCase, SignUpUseCase {
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final ApplicationEventPublisher eventPublisher;
+    private final LoadOAuthInfoPort loadOAuthInfoPort;
+    private final CommandOAuthInfoPort commandOAuthInfoPort;
+
 
     @Override
     @Transactional
@@ -48,7 +55,13 @@ public class MemberService implements SignInUseCase, SignUpUseCase {
     }
 
     @Override
-    public Long signIn(OAuthSignInRequestDto oAuthSignInRequestDto) {
-        return null;
+    public Long signIn(OAuthSignInRequestDto requestDto) {
+        OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(requestDto);
+        Provider provider = Provider.findByCode(requestDto.provider());
+        Member member = loadMemberPort.loadMemberByEmailAndProvider(oAuthInfo.getEmail(), provider).orElseThrow(() -> {
+            commandOAuthInfoPort.save(oAuthInfo);
+            return new OAuthSignInException(oAuthInfo);
+        });
+        return member.getId();
     }
 }

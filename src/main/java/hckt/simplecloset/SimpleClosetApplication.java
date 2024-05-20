@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
-@ConfigurationPropertiesScan("hckt.simplecloset.global.config")
+@ConfigurationPropertiesScan("hckt.simplecloset.**.config")
 public class SimpleClosetApplication {
 
     public static void main(String[] args) {
