@@ -47,12 +47,24 @@ dependencies {
     // Json
     implementation 'org.json:json:20240303'
 
+    // mockWebserver
+    testImplementation 'com.squareup.okhttp3:mockwebserver'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+}
+
+// submodule > application-prod.yml 설정
+task copyPrivate(type: Copy) {
+    copy {
+        from './simple-closet-config/property'
+        include "application-test.yml"
+        into 'src/main/resources'
+    }
 }
 
 tasks.named('test') {
