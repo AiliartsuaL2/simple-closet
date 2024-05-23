@@ -3,10 +3,7 @@ package hckt.simplecloset.member.application.service;
 import hckt.simplecloset.global.domain.Provider;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
-import hckt.simplecloset.member.application.port.out.CommandMemberPort;
-import hckt.simplecloset.member.application.port.out.CommandOAuthInfoPort;
-import hckt.simplecloset.member.application.port.out.LoadMemberPort;
-import hckt.simplecloset.member.application.port.out.LoadOAuthInfoPort;
+import hckt.simplecloset.member.application.port.out.*;
 import hckt.simplecloset.member.domain.Member;
 import hckt.simplecloset.member.exception.ErrorMessage;
 import org.assertj.core.api.Assertions;
@@ -32,8 +29,9 @@ class MemberServiceTest {
     ApplicationEventPublisher applicationEventPublisher = mock(ApplicationEventPublisher.class);
     LoadOAuthInfoPort loadOAuthInfoPort = mock(LoadOAuthInfoPort.class);
     CommandOAuthInfoPort commandOAuthInfoPort = mock(CommandOAuthInfoPort.class);
+    LoadTokenPort loadTokenPort = mock(LoadTokenPort.class);
 
-    MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, applicationEventPublisher, loadOAuthInfoPort, commandOAuthInfoPort);
+    MemberService memberService = new MemberService(commandMemberPort, loadMemberPort, applicationEventPublisher, loadOAuthInfoPort, commandOAuthInfoPort, loadTokenPort);
 
     void assertThrow(ThrowableAssert.ThrowingCallable action, String errorMessage, Class<? extends Throwable> throwable) {
         Assertions.assertThatThrownBy(action)

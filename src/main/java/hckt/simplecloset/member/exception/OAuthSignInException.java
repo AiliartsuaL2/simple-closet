@@ -10,4 +10,8 @@ public class OAuthSignInException extends RuntimeException {
         super(ErrorMessage.NOT_EXIST_MEMBER.getMessage());
         this.uid = oAuthInfo.getUid();
     }
+
+    public String getUidParameter() {
+        return "?uid=" + this.uid;
+    }
 }

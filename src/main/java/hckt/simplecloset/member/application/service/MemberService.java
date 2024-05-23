@@ -6,12 +6,11 @@ import hckt.simplecloset.global.dto.event.CreateUserAccountEvent;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
+import hckt.simplecloset.member.application.dto.out.GetTokenResponseDto;
+import hckt.simplecloset.member.application.port.in.GetTokenUseCase;
 import hckt.simplecloset.member.application.port.in.SignInUseCase;
 import hckt.simplecloset.member.application.port.in.SignUpUseCase;
-import hckt.simplecloset.member.application.port.out.CommandMemberPort;
-import hckt.simplecloset.member.application.port.out.CommandOAuthInfoPort;
-import hckt.simplecloset.member.application.port.out.LoadMemberPort;
-import hckt.simplecloset.member.application.port.out.LoadOAuthInfoPort;
+import hckt.simplecloset.member.application.port.out.*;
 import hckt.simplecloset.member.domain.Member;
 import hckt.simplecloset.member.domain.OAuthInfo;
 import hckt.simplecloset.member.exception.ErrorMessage;
@@ -23,13 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService implements SignInUseCase, SignUpUseCase {
+public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseCase {
+
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
     private final ApplicationEventPublisher eventPublisher;
     private final LoadOAuthInfoPort loadOAuthInfoPort;
     private final CommandOAuthInfoPort commandOAuthInfoPort;
-
+    private final LoadTokenPort loadTokenPort;
 
     @Override
     @Transactional
@@ -55,6 +55,7 @@ public class MemberService implements SignInUseCase, SignUpUseCase {
     }
 
     @Override
+    @Transactional(noRollbackFor = OAuthSignInException.class)
     public Long signIn(OAuthSignInRequestDto requestDto) {
         OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(requestDto);
         Provider provider = Provider.findByCode(requestDto.provider());
@@ -63,5 +64,10 @@ public class MemberService implements SignInUseCase, SignUpUseCase {
             return new OAuthSignInException(oAuthInfo);
         });
         return member.getId();
+    }
+
+    @Override
+    public GetTokenResponseDto getToken(Long memberId) {
+        return loadTokenPort.loadToken(memberId);
     }
 }

@@ -50,6 +50,16 @@ dependencies {
     // mockWebserver
     testImplementation 'com.squareup.okhttp3:mockwebserver'
 
+    // aws sqs
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
+
+    // aws temporary queue
+    implementation 'com.amazonaws:amazon-sqs-java-temporary-queues-client:2.0.1'
+
+    // aws s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
