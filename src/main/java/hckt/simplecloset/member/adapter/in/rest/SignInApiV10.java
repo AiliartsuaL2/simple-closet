@@ -52,7 +52,7 @@ public class SignInApiV10 {
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @PostMapping("/oauth/{provider}")
+    @GetMapping("/oauth/{provider}")
     public ResponseEntity<ApiCommonResponse<String>> signIn(@PathVariable String provider, @RequestParam String code) {
         HttpHeaders headers = new HttpHeaders();
         try {

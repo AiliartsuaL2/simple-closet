@@ -1,6 +1,7 @@
 package hckt.simplecloset.global.exception;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.amazonaws.AmazonServiceException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public enum ErrorMessage {
     SIGNATURE_TOKEN_EXCEPTION("서버의 토큰 형식과 일치하지 않아요"),
     MALFORMED_TOKEN("지원하지 않는 토큰 형식이에요"),
     EXPIRED_TOKEN("만료된 토큰 정보에요"),
-    INCORRECT_TOKEN_TYPE("발급되지 않은 토큰 정보에요");
-
+    INCORRECT_TOKEN_TYPE("발급되지 않은 토큰 정보에요"),
+    INVALID_MEMBER_ID("요청 메세지가 올바른 회원 ID 형식이 아니에요");
     private final String message;
 }
