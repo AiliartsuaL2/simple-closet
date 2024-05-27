@@ -75,6 +75,12 @@ task copyPrivate(type: Copy) {
         include "application-test.yml"
         into 'src/main/resources'
     }
+
+    copy {
+        from './simple-closet-config/key'
+        include "AuthKey_*"
+        into 'src/main/resources/key/apple'
+    }
 }
 
 tasks.named('test') {

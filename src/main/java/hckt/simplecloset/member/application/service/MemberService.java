@@ -3,6 +3,7 @@ package hckt.simplecloset.member.application.service;
 import hckt.simplecloset.global.annotation.UseCase;
 import hckt.simplecloset.global.domain.Provider;
 import hckt.simplecloset.global.dto.event.CreateUserAccountEvent;
+import hckt.simplecloset.member.adapter.in.rest.dto.request.SignInAppleRequestDto;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
@@ -64,6 +65,11 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
             return new OAuthSignInException(oAuthInfo);
         });
         return member.getId();
+    }
+
+    @Override
+    public Long signIn(SignInAppleRequestDto requestDto) throws Exception {
+        return null;
     }
 
     @Override

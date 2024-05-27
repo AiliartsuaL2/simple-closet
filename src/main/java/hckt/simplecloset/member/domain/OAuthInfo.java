@@ -43,4 +43,13 @@ public class OAuthInfo extends BaseEntity {
         this.image = image;
         this.nickname = nickname;
     }
+
+    public OAuthInfo(Provider provider, String email) {
+        this.uid = UUID.randomUUID().toString().replace("-", "");
+        this.provider = provider;
+        this.email = email;
+        //todo image gravatar 설정
+        this.image = "";
+        this.nickname = "익명";
+    }
 }

@@ -1,6 +1,7 @@
 package hckt.simplecloset.member.adapter.in.rest;
 
 import hckt.simplecloset.global.dto.ApiCommonResponse;
+import hckt.simplecloset.member.adapter.in.rest.dto.request.SignInAppleRequestDto;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.out.GetTokenResponseDto;
@@ -62,6 +63,22 @@ public class SignInApiV10 {
         } catch (OAuthSignInException ex) {
             String uidParameter = ex.getUidParameter();
             headers.setLocation(getSignUpUri(uidParameter));
+        }
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @PostMapping("/oauth/apple")
+    public ResponseEntity<ApiCommonResponse<String>> signIn(@RequestBody SignInAppleRequestDto requestDto) {
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            Long memberId = signInUseCase.signIn(requestDto);
+            GetTokenResponseDto token = getTokenUseCase.getToken(memberId);
+            headers.setLocation(getSignInUri(token));
+        } catch (OAuthSignInException ex) {
+            String uidParameter = ex.getUidParameter();
+            headers.setLocation(getSignUpUri(uidParameter));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
