@@ -1,6 +1,7 @@
 package hckt.simplecloset.member.adapter.out;
 
 import hckt.simplecloset.global.annotation.Adapter;
+import hckt.simplecloset.member.adapter.in.rest.dto.request.SignInAppleRequestDto;
 import hckt.simplecloset.member.adapter.out.communicate.OAuthInfoCommunicateAdapter;
 import hckt.simplecloset.member.adapter.out.persistence.OAuthInfoRepository;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
@@ -24,6 +25,11 @@ class OAuthInfoAdapter implements CommandOAuthInfoPort, LoadOAuthInfoPort {
 
     @Override
     public OAuthInfo loadOAuthInfo(OAuthSignInRequestDto requestDto) {
+        return oAuthInfoCommunicateAdapter.loadOAuthInfo(requestDto);
+    }
+
+    @Override
+    public OAuthInfo loadOAuthInfo(SignInAppleRequestDto requestDto) {
         return oAuthInfoCommunicateAdapter.loadOAuthInfo(requestDto);
     }
 

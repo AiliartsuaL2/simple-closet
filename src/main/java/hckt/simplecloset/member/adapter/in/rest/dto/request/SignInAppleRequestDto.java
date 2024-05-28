@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignInAppleRequestDto {
     private String code;
-    private String idToken;
+    private String id_token;
 }

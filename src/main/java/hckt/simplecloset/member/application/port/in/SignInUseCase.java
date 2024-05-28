@@ -10,5 +10,5 @@ public interface SignInUseCase {
 
     Long signIn(OAuthSignInRequestDto oAuthSignInRequestDto);
 
-    Long signIn(SignInAppleRequestDto requestDto) throws Exception;
+    Long signIn(SignInAppleRequestDto requestDto);
 }

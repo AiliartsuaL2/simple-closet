@@ -1,7 +1,6 @@
 package hckt.simplecloset.member.config;
 
 import hckt.simplecloset.global.domain.Provider;
-import hckt.simplecloset.member.adapter.out.communicate.dto.AppleResponseDto;
 import hckt.simplecloset.member.adapter.out.communicate.dto.GoogleResponseDto;
 import hckt.simplecloset.member.adapter.out.communicate.dto.KakaoResponseDto;
 import hckt.simplecloset.member.exception.ErrorMessage;
@@ -21,7 +20,6 @@ public class OAuth2ProviderProperties {
         this.apple = apple;
         kakao.setResponseType(KakaoResponseDto.class);
         google.setResponseType(GoogleResponseDto.class);
-        apple.setResponseType(AppleResponseDto.class);
     }
 
     public ProviderInfo get(Provider provider) {

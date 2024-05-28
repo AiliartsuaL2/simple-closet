@@ -53,11 +53,11 @@ public class SignInApiV10 {
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @GetMapping("/oauth/{provider}")
-    public ResponseEntity<ApiCommonResponse<String>> signIn(@PathVariable String provider, @RequestParam String code) {
+    @PostMapping("/oauth/apple")
+    public ResponseEntity<?> signIn(@RequestBody SignInAppleRequestDto requestDto) {
         HttpHeaders headers = new HttpHeaders();
         try {
-            Long memberId = signInUseCase.signIn(new OAuthSignInRequestDto(code, provider));
+            Long memberId = signInUseCase.signIn(requestDto);
             GetTokenResponseDto token = getTokenUseCase.getToken(memberId);
             headers.setLocation(getSignInUri(token));
         } catch (OAuthSignInException ex) {
@@ -67,18 +67,16 @@ public class SignInApiV10 {
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @PostMapping("/oauth/apple")
-    public ResponseEntity<ApiCommonResponse<String>> signIn(@RequestBody SignInAppleRequestDto requestDto) {
+    @GetMapping("/oauth/{provider}")
+    public ResponseEntity<?> signIn(@PathVariable String provider, @RequestParam String code) {
         HttpHeaders headers = new HttpHeaders();
         try {
-            Long memberId = signInUseCase.signIn(requestDto);
+            Long memberId = signInUseCase.signIn(new OAuthSignInRequestDto(code, provider));
             GetTokenResponseDto token = getTokenUseCase.getToken(memberId);
             headers.setLocation(getSignInUri(token));
         } catch (OAuthSignInException ex) {
             String uidParameter = ex.getUidParameter();
             headers.setLocation(getSignUpUri(uidParameter));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }

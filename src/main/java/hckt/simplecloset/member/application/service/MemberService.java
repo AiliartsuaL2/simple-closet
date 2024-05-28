@@ -68,8 +68,14 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
     }
 
     @Override
-    public Long signIn(SignInAppleRequestDto requestDto) throws Exception {
-        return null;
+    @Transactional(noRollbackFor = OAuthSignInException.class)
+    public Long signIn(SignInAppleRequestDto requestDto) {
+        OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(requestDto);
+        Member member = loadMemberPort.loadMemberByEmailAndProvider(oAuthInfo.getEmail(), Provider.APPLE).orElseThrow(() -> {
+            commandOAuthInfoPort.save(oAuthInfo);
+            return new OAuthSignInException(oAuthInfo);
+        });
+        return member.getId();
     }
 
     @Override

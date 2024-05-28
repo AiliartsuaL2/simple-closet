@@ -3,14 +3,13 @@ package hckt.simplecloset.member.domain;
 import hckt.simplecloset.global.domain.BaseEntity;
 import hckt.simplecloset.global.domain.Provider;
 import hckt.simplecloset.global.domain.converter.ProviderConverter;
+import hckt.simplecloset.member.exception.ErrorMessage;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -37,6 +36,13 @@ public class OAuthInfo extends BaseEntity {
     private String nickname;
 
     public OAuthInfo(Provider provider, String email, String image, String nickname) {
+        if (ObjectUtils.isEmpty(email)) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_EMAIL.getMessage());
+        }
+        if (ObjectUtils.isEmpty(provider)) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_PROVIDER.getMessage());
+        }
+
         this.uid = UUID.randomUUID().toString().replace("-", "");
         this.provider = provider;
         this.email = email;
@@ -45,6 +51,13 @@ public class OAuthInfo extends BaseEntity {
     }
 
     public OAuthInfo(Provider provider, String email) {
+        if (ObjectUtils.isEmpty(email)) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_EMAIL.getMessage());
+        }
+        if (ObjectUtils.isEmpty(provider)) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_PROVIDER.getMessage());
+        }
+
         this.uid = UUID.randomUUID().toString().replace("-", "");
         this.provider = provider;
         this.email = email;
