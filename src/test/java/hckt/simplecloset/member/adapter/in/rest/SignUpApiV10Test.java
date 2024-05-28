@@ -35,6 +35,7 @@ class SignUpApiV10Test {
     private static final String SIGN_UP_PATH = "/api/v1.0/sign-up";
     private static final String EMAIL = "test@example.com";
     private static final String PASSWORD = "password";
+    private static final String PICTURE = "picture";
     private static final String PROVIDER = "google";
 
     @Autowired
@@ -58,7 +59,7 @@ class SignUpApiV10Test {
     @DisplayName("정상 요청시 201이 응답된다.")
     void test2() throws Exception {
         // given
-        SignUpRequestDto signUpRequestDto = new SignUpRequestDto(EMAIL, PASSWORD, PROVIDER);
+        SignUpRequestDto signUpRequestDto = new SignUpRequestDto(EMAIL, PASSWORD, PICTURE, PROVIDER);
 
         // when & then
         mockMvc.perform(post(SIGN_UP_PATH)

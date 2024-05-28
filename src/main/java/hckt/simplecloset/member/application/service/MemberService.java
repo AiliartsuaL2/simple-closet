@@ -42,6 +42,7 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
         Member member = new Member(
                 signUpRequestDto.email(),
                 signUpRequestDto.password(),
+                signUpRequestDto.picture(),
                 Provider.findByCode(signUpRequestDto.provider()));
         commandMemberPort.save(member);
 

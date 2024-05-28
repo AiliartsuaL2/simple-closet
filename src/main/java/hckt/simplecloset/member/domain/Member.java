@@ -26,11 +26,14 @@ public class Member extends BaseEntity {
     @Column(length = 60)
     private String password;
 
+    @Column(length = 100)
+    private String picture;
+
     @Convert(converter = ProviderConverter.class)
     private Provider provider;
 
     // 회원 생성
-    public Member(String email, String password, Provider provider) {
+    public Member(String email, String password, String picture, Provider provider) {
         notNullValidation(email, ErrorMessage.NOT_EXIST_EMAIL.getMessage());
         notNullValidation(password, ErrorMessage.NOT_EXIST_PASSWORD.getMessage());
         notNullValidation(provider, ErrorMessage.NOT_EXIST_PROVIDER.getMessage());
@@ -38,6 +41,7 @@ public class Member extends BaseEntity {
         this.email = email;
         this.password = B_CRYPT_PASSWORD_ENCODER.encode(password);
         this.provider = provider;
+        this.picture = picture;
     }
 
     // 로그인

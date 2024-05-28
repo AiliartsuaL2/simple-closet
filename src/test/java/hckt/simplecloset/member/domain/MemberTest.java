@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MemberTest {
     private static final String EMAIL = "test@example.com";
     private static final String PASSWORD = "testPassword";
+    private static final String PICTURE = "picture";
     private static final Provider PROVIDER = Provider.GOOGLE;
 
     void assertThrow(ThrowableAssert.ThrowingCallable action, String errorMessage, Class<? extends Throwable> throwable) {
@@ -33,7 +34,7 @@ class MemberTest {
             String errorMessage = ErrorMessage.NOT_EXIST_EMAIL.getMessage();
 
             // when & then
-            assertThrow(() -> new Member(email, password, PROVIDER), errorMessage, IllegalArgumentException.class);
+            assertThrow(() -> new Member(email, password, PICTURE, PROVIDER), errorMessage, IllegalArgumentException.class);
         }
 
         @Test
@@ -45,7 +46,7 @@ class MemberTest {
             String errorMessage = ErrorMessage.NOT_EXIST_PASSWORD.getMessage();
 
             // when & then
-            assertThrow(() -> new Member(email, password, PROVIDER), errorMessage, IllegalArgumentException.class);
+            assertThrow(() -> new Member(email, password, PICTURE, PROVIDER), errorMessage, IllegalArgumentException.class);
         }
 
         @Test
@@ -58,7 +59,7 @@ class MemberTest {
             String errorMessage = ErrorMessage.NOT_EXIST_PROVIDER.getMessage();
 
             // when & then
-            assertThrow(() -> new Member(email, password, provider), errorMessage, IllegalArgumentException.class);
+            assertThrow(() -> new Member(email, password, PICTURE, provider), errorMessage, IllegalArgumentException.class);
         }
 
 
@@ -70,7 +71,7 @@ class MemberTest {
             String password = PASSWORD;
 
             // when
-            Member member = new Member(email, password, PROVIDER);
+            Member member = new Member(email, password, PICTURE, PROVIDER);
 
             // then
             assertThat(email).isEqualTo(member.getEmail());
@@ -86,7 +87,7 @@ class MemberTest {
         @DisplayName("비밀번호 불일치시 예외가 발생한다")
         void test1() {
             // given
-            Member member = new Member(EMAIL, PASSWORD, PROVIDER);
+            Member member = new Member(EMAIL, PASSWORD, PICTURE, PROVIDER);
             String password = PASSWORD + "abcde";
 
             // when & then
@@ -99,7 +100,7 @@ class MemberTest {
         @DisplayName("비밀번호 일치시 예외가 발생하지 않는다.")
         void test2() {
             // given
-            Member member = new Member(EMAIL, PASSWORD, PROVIDER);
+            Member member = new Member(EMAIL, PASSWORD, PICTURE, PROVIDER);
             String password = PASSWORD;
 
             // when & then

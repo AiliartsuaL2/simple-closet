@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 class MemberPersistenceAdapterTest {
     private static final String EMAIL = "test@example.com";
     private static final String PASSWORD = "test";
+    private static final String PICTURE = "picture";
     private static final Provider PROVIDER = Provider.GOOGLE;
     @Autowired
     MemberPersistenceAdapter memberPersistenceAdapter;
@@ -33,7 +34,7 @@ class MemberPersistenceAdapterTest {
         @DisplayName("회원 저장시 ID가 생성된다.")
         void test1() {
             // given
-            Member member = new Member(EMAIL, PASSWORD, PROVIDER);
+            Member member = new Member(EMAIL, PASSWORD, PICTURE, PROVIDER);
 
             // when
             memberPersistenceAdapter.save(member);
@@ -60,7 +61,7 @@ class MemberPersistenceAdapterTest {
         @DisplayName("회원 생성후 조회시 Optional.empty()가 false이다.")
         void test2() {
             // given
-            Member member = new Member(EMAIL, PASSWORD, PROVIDER);
+            Member member = new Member(EMAIL, PASSWORD, PICTURE, PROVIDER);
             memberRepository.save(member);
 
             // when

@@ -17,6 +17,9 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="OAUTH_INFO")
 public class OAuthInfo extends BaseEntity {
+    private static final String RANDOM_PICTURE_URL = "https://www.gravatar.com/avatar/";
+    private static final String PICTURE_TYPE_PARAM = "?d=identicon";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,7 +49,7 @@ public class OAuthInfo extends BaseEntity {
         this.uid = UUID.randomUUID().toString().replace("-", "");
         this.provider = provider;
         this.email = email;
-        this.image = image;
+        this.image = checkPicture(image);
         this.nickname = nickname;
     }
 
@@ -61,8 +64,17 @@ public class OAuthInfo extends BaseEntity {
         this.uid = UUID.randomUUID().toString().replace("-", "");
         this.provider = provider;
         this.email = email;
-        //todo image gravatar 설정
-        this.image = "";
+        this.image = checkPicture("");
         this.nickname = "익명";
+    }
+
+    private static String checkPicture(String picture) {
+        if(ObjectUtils.isEmpty(picture)) {
+            return String.join("",
+                    RANDOM_PICTURE_URL,
+                    UUID.randomUUID().toString().replace("-",""),
+                    PICTURE_TYPE_PARAM);
+        }
+        return picture;
     }
 }

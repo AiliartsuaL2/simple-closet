@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 class MemberServiceTest {
     private static final String EMAIL = "test@example.com";
     private static final String PASSWORD = "testPassword";
+    private static final String PICTURE = "picture";
     private static final String PROVIDER = "google";
     CommandMemberPort commandMemberPort = mock(CommandMemberPort.class);
     LoadMemberPort loadMemberPort = mock(LoadMemberPort.class);
@@ -46,7 +47,7 @@ class MemberServiceTest {
         @DisplayName("이미 존재하는 이메일이 있는경우, 예외가 발생한다.")
         void test1() {
             // given
-            SignUpRequestDto signUpRequestDto = new SignUpRequestDto(EMAIL, PASSWORD, PROVIDER);
+            SignUpRequestDto signUpRequestDto = new SignUpRequestDto(EMAIL, PASSWORD, PICTURE, PROVIDER);
             when(loadMemberPort.findByEmail(EMAIL))
                     .thenReturn(Optional.of(mock(Member.class)));
 
@@ -60,7 +61,7 @@ class MemberServiceTest {
         @DisplayName("정상 회원가입시 commandMemberPort.save 호출")
         void test2() {
             // given
-            SignUpRequestDto signUpRequestDto = new SignUpRequestDto(EMAIL, PASSWORD, PROVIDER);
+            SignUpRequestDto signUpRequestDto = new SignUpRequestDto(EMAIL, PASSWORD, PICTURE,PROVIDER);
 
             // when
             memberService.signUp(signUpRequestDto);
@@ -93,7 +94,7 @@ class MemberServiceTest {
             // given
             SignInRequestDto signInRequestDto = new SignInRequestDto(EMAIL, PASSWORD);
             Provider provider = Provider.findByCode(PROVIDER);
-            Member member = new Member(EMAIL, PASSWORD, provider);
+            Member member = new Member(EMAIL, PASSWORD, PICTURE, provider);
             when(loadMemberPort.findByEmail(EMAIL))
                     .thenReturn(Optional.of(member));
 
