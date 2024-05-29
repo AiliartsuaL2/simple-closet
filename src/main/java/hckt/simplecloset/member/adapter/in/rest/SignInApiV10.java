@@ -53,7 +53,10 @@ public class SignInApiV10 {
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @PostMapping("/oauth/apple")
+    @PostMapping(
+            value = "/oauth/apple",
+            consumes = "application/x-www-form-urlencoded;charset=UTF-8"
+    )
     public ResponseEntity<?> signIn(@RequestBody SignInAppleRequestDto requestDto) {
         HttpHeaders headers = new HttpHeaders();
         try {
