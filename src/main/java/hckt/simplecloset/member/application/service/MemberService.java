@@ -63,22 +63,14 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
     public Long signIn(OAuthSignInRequestDto requestDto) {
         OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(requestDto);
         Provider provider = Provider.findByCode(requestDto.provider());
-        Member member = loadMemberPort.loadMemberByEmailAndProvider(oAuthInfo.getEmail(), provider).orElseThrow(() -> {
-            commandOAuthInfoPort.save(oAuthInfo);
-            return new OAuthSignInException(oAuthInfo);
-        });
-        return member.getId();
+        return getRegisteredMemberId(oAuthInfo, provider);
     }
 
     @Override
     @Transactional(noRollbackFor = OAuthSignInException.class)
     public Long signIn(SignInAppleRequestDto requestDto) {
         OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(requestDto);
-        Member member = loadMemberPort.loadMemberByEmailAndProvider(oAuthInfo.getEmail(), Provider.APPLE).orElseThrow(() -> {
-            commandOAuthInfoPort.save(oAuthInfo);
-            return new OAuthSignInException(oAuthInfo);
-        });
-        return member.getId();
+        return getRegisteredMemberId(oAuthInfo, Provider.APPLE);
     }
 
     @Override
@@ -91,5 +83,13 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
         OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(uid)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_OAUTH_INFO_BY_UID.getMessage()));
         return GetOAuthInfoResponseDto.fromEntity(oAuthInfo);
+    }
+
+    private Long getRegisteredMemberId(OAuthInfo oAuthInfo, Provider provider) {
+        Member member = loadMemberPort.loadMemberByEmailAndProvider(oAuthInfo.getEmail(), provider).orElseThrow(() -> {
+            commandOAuthInfoPort.save(oAuthInfo);
+            return new OAuthSignInException(oAuthInfo);
+        });
+        return member.getId();
     }
 }
