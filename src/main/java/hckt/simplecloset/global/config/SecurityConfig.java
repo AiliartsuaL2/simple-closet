@@ -29,7 +29,8 @@ public class SecurityConfig {
     private static final String[] OAUTH_V1_WHITELIST = {
             "/api/v1.0/oauth/google",
             "/api/v1.0/oauth/kakao",
-            "/api/v1.0/oauth/apple"
+            "/api/v1.0/oauth/apple",
+            "/api/v1.0/oauth/info"
     };
     private static final String AUTHENTICATION_TEST_URL = "/api/v1/auth/not-use/test";
 

@@ -7,7 +7,9 @@ import hckt.simplecloset.member.adapter.in.rest.dto.request.SignInAppleRequestDt
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
+import hckt.simplecloset.member.application.dto.out.GetOAuthInfoResponseDto;
 import hckt.simplecloset.member.application.dto.out.GetTokenResponseDto;
+import hckt.simplecloset.member.application.port.in.GetOAuthInfoUseCase;
 import hckt.simplecloset.member.application.port.in.GetTokenUseCase;
 import hckt.simplecloset.member.application.port.in.SignInUseCase;
 import hckt.simplecloset.member.application.port.in.SignUpUseCase;
@@ -23,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseCase {
+public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseCase, GetOAuthInfoUseCase {
 
     private final CommandMemberPort commandMemberPort;
     private final LoadMemberPort loadMemberPort;
@@ -82,5 +84,12 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
     @Override
     public GetTokenResponseDto getToken(Long memberId) {
         return loadTokenPort.loadToken(memberId);
+    }
+
+    @Override
+    public GetOAuthInfoResponseDto getOAuthInfo(String uid) {
+        OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(uid)
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_OAUTH_INFO_BY_UID.getMessage()));
+        return GetOAuthInfoResponseDto.fromEntity(oAuthInfo);
     }
 }
