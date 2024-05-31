@@ -50,25 +50,10 @@ public class OAuthInfo extends BaseEntity {
         this.provider = provider;
         this.email = email;
         this.image = checkPicture(image);
-        this.nickname = nickname;
+        this.nickname = checkNickname(nickname);
     }
 
-    public OAuthInfo(Provider provider, String email) {
-        if (ObjectUtils.isEmpty(email)) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_EMAIL.getMessage());
-        }
-        if (ObjectUtils.isEmpty(provider)) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_PROVIDER.getMessage());
-        }
-
-        this.uid = UUID.randomUUID().toString().replace("-", "");
-        this.provider = provider;
-        this.email = email;
-        this.image = checkPicture("");
-        this.nickname = "익명";
-    }
-
-    private static String checkPicture(String picture) {
+    private String checkPicture(String picture) {
         if(ObjectUtils.isEmpty(picture)) {
             return String.join("",
                     RANDOM_PICTURE_URL,
@@ -76,5 +61,12 @@ public class OAuthInfo extends BaseEntity {
                     PICTURE_TYPE_PARAM);
         }
         return picture;
+    }
+
+    private String checkNickname(String nickname) {
+        if(ObjectUtils.isEmpty(nickname)) {
+            return "익명";
+        }
+        return nickname;
     }
 }

@@ -75,7 +75,7 @@ public class OAuthInfoCommunicateAdapter {
                 .parseClaimsJws(requestDto.getId_token())
                 .getBody()
                 .get("email", String.class);
-        return new OAuthInfo(Provider.APPLE, email);
+        return new OAuthInfo(Provider.APPLE, email, "", "");
     }
 
     OAuthCommunicateResponseDto communicateWithOAuthServer(String redirectUri, ProviderInfo providerInfo, String code) {

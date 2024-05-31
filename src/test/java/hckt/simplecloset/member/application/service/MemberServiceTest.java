@@ -167,7 +167,7 @@ class MemberServiceTest {
         void test1() {
             // given
             SignInAppleRequestDto requestDto = new SignInAppleRequestDto(CODE, ID_TOKEN);
-            OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL);
+            OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL, "", "");
             when(loadOAuthInfoPort.loadOAuthInfo(requestDto))
                     .thenReturn(oAuthInfo);
             when(loadMemberPort.loadMemberByEmailAndProvider(EMAIL, Provider.APPLE))
@@ -185,7 +185,7 @@ class MemberServiceTest {
         void test2() {
             // given
             SignInAppleRequestDto requestDto = new SignInAppleRequestDto(CODE, ID_TOKEN);
-            OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL);
+            OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL, "", "");
             Member member = mock(Member.class);
             when(member.getId())
                     .thenReturn(ID);
