@@ -2,6 +2,7 @@ package hckt.simplecloset.member.application.service;
 
 import hckt.simplecloset.global.domain.Provider;
 import hckt.simplecloset.member.adapter.in.rest.dto.request.SignInAppleRequestDto;
+import hckt.simplecloset.member.application.dto.in.GetOAuthInfoRequestDto;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
@@ -206,15 +207,17 @@ class MemberServiceTest {
     @DisplayName("OAuth Info 조회 테스트")
     class GetToken {
         private final String uid = "uid";
+        private final String type = "sign-up";
         @Test
         @DisplayName("UID에 해당하는 OAuth Info 미존재시 예외가 발생한다.")
         void test1() {
             // given
+            GetOAuthInfoRequestDto requestDto = new GetOAuthInfoRequestDto(uid, type);
             when(loadOAuthInfoPort.loadOAuthInfo(uid))
                     .thenReturn(Optional.empty());
 
             // when & then
-            Assertions.assertThatThrownBy(() -> memberService.getOAuthInfo(uid))
+            Assertions.assertThatThrownBy(() -> memberService.getOAuthInfo(requestDto))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage(ErrorMessage.NOT_EXIST_OAUTH_INFO_BY_UID.getMessage());
         }
@@ -223,12 +226,13 @@ class MemberServiceTest {
         @DisplayName("존재하는 OAuthInfo 조회시 생성한 OAuthInfo가 Dto로 변환되어 반환된다.")
         void test2() {
             // given
+            GetOAuthInfoRequestDto requestDto = new GetOAuthInfoRequestDto(uid, type);
             OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL, PICTURE,  NICKNAME);
             when(loadOAuthInfoPort.loadOAuthInfo(uid))
                     .thenReturn(Optional.of(oAuthInfo));
 
             // when
-            GetOAuthInfoResponseDto dto = memberService.getOAuthInfo(uid);
+            GetOAuthInfoResponseDto dto = memberService.getOAuthInfo(requestDto);
 
             // then
             assertThat(dto.email()).isEqualTo(EMAIL);

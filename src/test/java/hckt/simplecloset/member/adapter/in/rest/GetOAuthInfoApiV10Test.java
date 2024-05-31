@@ -3,6 +3,7 @@ package hckt.simplecloset.member.adapter.in.rest;
 import hckt.simplecloset.global.handler.JwtAccessDeniedHandler;
 import hckt.simplecloset.global.handler.JwtAuthenticationEntryPoint;
 import hckt.simplecloset.global.handler.JwtExceptionFilter;
+import hckt.simplecloset.member.application.dto.in.GetOAuthInfoRequestDto;
 import hckt.simplecloset.member.application.port.in.GetOAuthInfoUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = JwtAuthenticationEntryPoint.class)}
 )
 class GetOAuthInfoApiV10Test {
-    private static final String PATH = "/api/v1.0/oauth/info";
+    private static final String PATH = "/api/v1.0/oauth/info/sign-up";
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,6 +54,8 @@ class GetOAuthInfoApiV10Test {
     void test2() throws Exception {
         // given
         String uid = "uid";
+        String type = "sign-up";
+        GetOAuthInfoRequestDto requestDto = new GetOAuthInfoRequestDto(uid, type);
 
         // when & then
         mockMvc.perform(get(PATH)
@@ -63,6 +66,6 @@ class GetOAuthInfoApiV10Test {
 
         then(getOAuthInfoUseCase)
                 .should()
-                .getOAuthInfo(uid);
+                .getOAuthInfo(requestDto);
     }
 }

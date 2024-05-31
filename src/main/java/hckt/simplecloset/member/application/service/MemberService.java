@@ -4,6 +4,7 @@ import hckt.simplecloset.global.annotation.UseCase;
 import hckt.simplecloset.global.domain.Provider;
 import hckt.simplecloset.global.dto.event.CreateUserAccountEvent;
 import hckt.simplecloset.member.adapter.in.rest.dto.request.SignInAppleRequestDto;
+import hckt.simplecloset.member.application.dto.in.GetOAuthInfoRequestDto;
 import hckt.simplecloset.member.application.dto.in.OAuthSignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignInRequestDto;
 import hckt.simplecloset.member.application.dto.in.SignUpRequestDto;
@@ -79,10 +80,18 @@ public class MemberService implements SignInUseCase, SignUpUseCase, GetTokenUseC
     }
 
     @Override
-    public GetOAuthInfoResponseDto getOAuthInfo(String uid) {
-        OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(uid)
+    public GetOAuthInfoResponseDto getOAuthInfo(GetOAuthInfoRequestDto requestDto) {
+        OAuthInfo oAuthInfo = loadOAuthInfoPort.loadOAuthInfo(requestDto.uid())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_OAUTH_INFO_BY_UID.getMessage()));
-        return GetOAuthInfoResponseDto.fromEntity(oAuthInfo);
+
+        GetTokenResponseDto token = null;
+        if ("sign-in".equals(requestDto.type())) {
+            Member member = loadMemberPort.loadMemberByEmailAndProvider(oAuthInfo.getEmail(), oAuthInfo.getProvider())
+                    .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.INVALID_TYPE.getMessage()));
+            token = getToken(member.getId());
+        }
+
+        return GetOAuthInfoResponseDto.fromEntity(oAuthInfo, token);
     }
 
     private Long getRegisteredMemberId(OAuthInfo oAuthInfo, Provider provider) {
