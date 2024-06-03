@@ -32,6 +32,12 @@ public class SecurityConfig {
             "/api/v1.0/oauth/apple",
             "/api/v1.0/oauth/info"
     };
+    private static final String[] SIGN_IN_WHITELIST = {
+            "/api/v1.0/sign-in",
+            "/api/v1.0/sign-up",
+            "/api/v1.0/token/refresh"
+    };
+
     private static final String AUTHENTICATION_TEST_URL = "/api/v1/auth/not-use/test";
 
     private final JwtService jwtService;
@@ -46,9 +52,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/resources/templates/member/login.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/member/login").permitAll()
-                        .requestMatchers("/api/v1.0/sign-up").permitAll()
-                        .requestMatchers("/api/v1.0/sign-in").permitAll()
                         .requestMatchers(OAUTH_V1_WHITELIST).permitAll()
+                        .requestMatchers(SIGN_IN_WHITELIST).permitAll()
                         .requestMatchers(AUTHENTICATION_TEST_URL).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(e ->

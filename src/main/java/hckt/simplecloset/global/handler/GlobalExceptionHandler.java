@@ -1,6 +1,7 @@
 package hckt.simplecloset.global.handler;
 
 import hckt.simplecloset.global.dto.ApiErrorResponse;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiErrorResponse> httpMessageNotReadableException(HttpMessageNotReadableException ex){
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return writeLogTraceAndResponse(status, ex);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiErrorResponse> jwtException(JwtException ex){
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return writeLogTraceAndResponse(status, ex);
     }
