@@ -1,8 +1,6 @@
 package hckt.simplecloset.global.adapter.in.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import hckt.simplecloset.global.adapter.in.rest.dto.request.RefreshAccessTokenRequestDto;
 import hckt.simplecloset.global.adapter.in.rest.dto.response.RefreshAccessTokenResponseDto;
 import hckt.simplecloset.global.application.port.in.RenewAccessTokenUseCase;
 import hckt.simplecloset.global.dto.ApiCommonResponse;
@@ -42,7 +40,6 @@ class RefreshAccessTokenApiV10Test {
     private MockMvc mockMvc;
     @MockBean
     RenewAccessTokenUseCase renewAccessTokenUseCase;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     @DisplayName("RefreshToken 미존재시 400이 응답된다.")
@@ -58,20 +55,19 @@ class RefreshAccessTokenApiV10Test {
     @DisplayName("정상 요청시, Status 200, access Token이 발급된다.")
     void test2() throws Exception {
         // given
-        String refreshToken = "refreshToken";
+        String requestRefreshToken = "Bearer refreshToken";
         String accessToken = "accessToken";
 
-        RefreshAccessTokenRequestDto requestDto = new RefreshAccessTokenRequestDto(refreshToken);
         RefreshAccessTokenResponseDto tokenResponseDto = new RefreshAccessTokenResponseDto(accessToken);
         ApiCommonResponse<RefreshAccessTokenResponseDto> responseDto = new ApiCommonResponse<>(tokenResponseDto, true);
         String responseJson = new Gson().toJson(responseDto);
 
-        when(renewAccessTokenUseCase.renewAccessToken(refreshToken))
+        when(renewAccessTokenUseCase.renewAccessToken(requestRefreshToken))
                 .thenReturn(accessToken);
 
         // when
         String response = mockMvc.perform(post(PATH)
-                        .content(objectMapper.writeValueAsString(requestDto))
+                        .header("Authorization", requestRefreshToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))
                 .andExpect(status().isOk())

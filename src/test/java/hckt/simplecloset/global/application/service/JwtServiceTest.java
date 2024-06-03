@@ -132,6 +132,7 @@ class JwtServiceTest {
         @DisplayName("정상 요청시 액세스 토큰이 반환된다.")
         void test2() {
             // given
+            String requestRefreshToken = "Bearer refreshToken";
             String refreshToken = "refreshToken";
             String accessToken = "accessToken";
             String payload = "payload";
@@ -141,7 +142,7 @@ class JwtServiceTest {
                     .thenReturn(accessToken);
 
             // when
-            String result = jwtService.renewAccessToken(refreshToken);
+            String result = jwtService.renewAccessToken(requestRefreshToken);
 
             // then
             Assertions.assertThat(result).isEqualTo(accessToken);
