@@ -223,8 +223,26 @@ class MemberServiceTest {
         }
 
         @Test
-        @DisplayName("존재하는 OAuthInfo 조회시 생성한 OAuthInfo가 Dto로 변환되어 반환된다.")
+        @DisplayName("회원이 아닌 사용자가 sign-in type으로 조회시 예외가 발생한다.")
         void test2() {
+            // given
+            String type = "sign-in";
+            GetOAuthInfoRequestDto requestDto = new GetOAuthInfoRequestDto(uid, type);
+            OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL, PICTURE,  NICKNAME);
+            when(loadOAuthInfoPort.loadOAuthInfo(uid))
+                    .thenReturn(Optional.of(oAuthInfo));
+            when(loadMemberPort.loadMemberByEmailAndProvider(EMAIL, Provider.APPLE))
+                    .thenReturn(Optional.empty());
+
+            // when & then
+            Assertions.assertThatThrownBy(() -> memberService.getOAuthInfo(requestDto))
+                    .isInstanceOf(IllegalArgumentException.class)
+                    .hasMessage(ErrorMessage.INVALID_TYPE.getMessage());
+        }
+
+        @Test
+        @DisplayName("존재하는 OAuthInfo 조회시 생성한 OAuthInfo가 Dto로 변환되어 반환된다.")
+        void test3() {
             // given
             GetOAuthInfoRequestDto requestDto = new GetOAuthInfoRequestDto(uid, type);
             OAuthInfo oAuthInfo = new OAuthInfo(Provider.APPLE, EMAIL, PICTURE,  NICKNAME);
