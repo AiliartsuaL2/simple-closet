@@ -1,5 +1,6 @@
 package hckt.simplecloset.clothes.domain;
 
+import hckt.simplecloset.clothes.exception.ErrorMessage;
 import hckt.simplecloset.global.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,6 +17,8 @@ public class Clothes extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long memberId;
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -34,7 +37,15 @@ public class Clothes extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
-    public Clothes(String category, String brand, String name, String image, String price, String description) {
+    @Transient
+    private MemberInfo memberInfo;
+
+    public Clothes(Long memberId, String category, String brand, String name, String image, String price, String description) {
+        notNullValidation(memberId, ErrorMessage.NOT_EXIST_MEMBER_ID.getMessage());
+        notNullValidation(brand, ErrorMessage.NOT_EXIST_BRAND.getMessage());
+        notNullValidation(name, ErrorMessage.NOT_EXIST_NAME.getMessage());
+
+        this.memberId = memberId;
         this.category = Category.findByValue(category);
         this.brand = brand;
         this.name = name;
@@ -44,17 +55,29 @@ public class Clothes extends BaseEntity {
         this.deleted = false;
     }
 
-    public void delete() {
+    public void delete(Long memberId) {
         if (this.deleted) {
-            throw new IllegalArgumentException("존재하지 않는 옷이에요");
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_CLOTHES.getMessage());
+        }
+        if (!this.memberId.equals(memberId)) {
+            throw new IllegalStateException(ErrorMessage.PERMISSION_DENIED_TO_DELETE.getMessage());
         }
         this.deleted = true;
         this.deletedAt = LocalDateTime.now();
     }
 
-    public void update(Clothes clothes) {
+    public void update(Clothes clothes, Long memberId) {
         if (this.deleted) {
-            throw new IllegalArgumentException("존재하지 않는 옷이에요");
+            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_CLOTHES.getMessage());
         }
+        if (!this.memberId.equals(memberId)) {
+            throw new IllegalStateException(ErrorMessage.PERMISSION_DENIED_TO_UPDATE.getMessage());
+        }
+        this.category = clothes.category;
+        this.brand = clothes.brand;
+        this.name = clothes.name;
+        this.image = clothes.image;
+        this.price = clothes.price;
+        this.description = clothes.description;
     }
 }

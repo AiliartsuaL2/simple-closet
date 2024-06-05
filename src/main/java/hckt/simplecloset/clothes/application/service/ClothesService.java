@@ -3,7 +3,6 @@ package hckt.simplecloset.clothes.application.service;
 import hckt.simplecloset.clothes.application.port.dto.request.CreateClothesRequestDto;
 import hckt.simplecloset.clothes.application.port.dto.request.UpdateClothesRequestDto;
 import hckt.simplecloset.clothes.application.port.dto.response.GetClothesListResponseDto;
-import hckt.simplecloset.clothes.application.port.dto.response.GetClothesResponseDto;
 import hckt.simplecloset.clothes.application.port.in.CreateClothesUseCase;
 import hckt.simplecloset.clothes.application.port.in.DeleteClothesUseCase;
 import hckt.simplecloset.clothes.application.port.in.GetClothesUseCase;
@@ -27,17 +26,17 @@ public class ClothesService implements CreateClothesUseCase, GetClothesUseCase, 
 
     @Override
     @Transactional
-    public void create(CreateClothesRequestDto requestDto) {
-        Clothes clothes = requestDto.toEntity();
+    public void create(CreateClothesRequestDto requestDto, Long memberId) {
+        Clothes clothes = requestDto.toEntity(memberId);
         commandClothesPort.save(clothes);
     }
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        Clothes clothes = loadClothesPort.findById(id)
+    public void delete(Long clothesId, Long memberId) {
+        Clothes clothes = loadClothesPort.findById(clothesId)
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_CLOTHES.getMessage()));
-        clothes.delete();
+        clothes.delete(memberId);
     }
 
     @Override
@@ -48,9 +47,9 @@ public class ClothesService implements CreateClothesUseCase, GetClothesUseCase, 
 
     @Override
     @Transactional
-    public void update(UpdateClothesRequestDto requestDto) {
+    public void update(UpdateClothesRequestDto requestDto, Long memberId) {
         Clothes clothes = loadClothesPort.findById(requestDto.id())
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_CLOTHES.getMessage()));
-        clothes.update(requestDto.toEntity());
+        clothes.update(requestDto.toEntity(memberId), memberId);
     }
 }

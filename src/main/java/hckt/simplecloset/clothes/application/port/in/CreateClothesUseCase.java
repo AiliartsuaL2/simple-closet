@@ -4,5 +4,5 @@ import hckt.simplecloset.clothes.application.port.dto.request.CreateClothesReque
 import hckt.simplecloset.clothes.domain.Clothes;
 
 public interface CreateClothesUseCase {
-    void create(CreateClothesRequestDto requestDto);
+    void create(CreateClothesRequestDto requestDto, Long memberId);
 }

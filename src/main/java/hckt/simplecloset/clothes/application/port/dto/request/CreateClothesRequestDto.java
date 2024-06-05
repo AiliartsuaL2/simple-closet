@@ -17,7 +17,7 @@ public record CreateClothesRequestDto(
         requiredArgumentValidation(name, ErrorMessage.NOT_EXIST_NAME.getMessage());
     }
 
-    public Clothes toEntity() {
-        return new Clothes(category, brand, name, image, price, description);
+    public Clothes toEntity(Long memberId) {
+        return new Clothes(memberId, category, brand, name, image, price, description);
     }
 }
