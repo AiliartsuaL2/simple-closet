@@ -20,6 +20,7 @@ public record UpdateClothesRequestDto(
     }
 
     public Clothes toEntity(Long memberId) {
+        requiredArgumentValidation(memberId, ErrorMessage.NOT_EXIST_MEMBER_ID.getMessage());
         return new Clothes(memberId, category, brand, name, image, price, description);
     }
 }
